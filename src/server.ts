@@ -6,6 +6,7 @@ import {ApolloServerPluginDrainHttpServer} from '@apollo/server/plugin/drainHttp
 import {resolvers, typeDefs} from './graphql';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import morgan from 'morgan';
 import {expressMiddleware} from '@apollo/server/express4';
 
 interface Context {
@@ -33,6 +34,7 @@ interface Context {
     '/graphql',
     cors<cors.CorsRequest>(),
     json(),
+    morgan("common"),
     expressMiddleware(server, {
       context: async ({req}) => ({token: req.headers.token}),
     })
