@@ -19,13 +19,17 @@ interface Context {
   const app = express();
   const httpServer = http.createServer(app);
   const {json} = bodyParser;
+  
 
   const server = new ApolloServer<Context>({
     schema: buildSubgraphSchema([
       {
-        typeDefs: typeDefs.exampleSchema,
-        resolvers: resolvers.exampleResolver,
+        typeDefs: typeDefs.userSchema,
+        resolvers: resolvers.userResolver,
       },
+      {
+        typeDefs: typeDefs.querySchema,
+      }
     ]),
     plugins: [ApolloServerPluginDrainHttpServer({httpServer})],
   });
