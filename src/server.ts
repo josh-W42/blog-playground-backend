@@ -7,6 +7,7 @@ import {resolvers, typeDefs} from './graphql';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
+import dotenv from 'dotenv';
 import {expressMiddleware} from '@apollo/server/express4';
 
 interface Context {
@@ -14,6 +15,7 @@ interface Context {
 }
 
 (async () => {
+  dotenv.config()
   const app = express();
   const httpServer = http.createServer(app);
   const {json} = bodyParser;
