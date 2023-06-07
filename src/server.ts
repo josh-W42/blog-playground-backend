@@ -9,6 +9,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import {expressMiddleware} from '@apollo/server/express4';
+import { DB } from './models';
 
 interface Context {
   token?: string;
@@ -46,7 +47,10 @@ interface Context {
     })
   );
 
+  
   const PORT = process.env.PORT || 4000;
+  const mongoURI = process.env.MONGO_PROD_URI || process.env.MONGO_DEV_URI;
+  DB.Init(mongoURI);
 
   await new Promise<void>(resolve => httpServer.listen({port: PORT}, resolve));
   console.log(`🚀 Server ready at http://localhost:${PORT}/`);

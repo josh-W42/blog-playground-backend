@@ -14,5 +14,6 @@ export const userSchema = gql`
     # comments: [Comment]
     # deleted
     createdAt: String
+    updatedAt: String
   }
 `;

@@ -1,17 +1,26 @@
 import { GraphQLError } from "graphql";
-import { User } from "../../../models";
+import { User, userDB } from "../../../models";
 import { CreateUserArgs } from "./types";
 
 export const userResolver = {
   Query: {
-    getUsers: () => {
-      console.log(users);
-      return users;
+    getUsers: async () => {
+      try {
+        const users = await userDB.find();
+        return users;
+      } catch (error) {
+        console.warn("Error When Fetching All Users: ", error);
+        throw new GraphQLError("Failed to Fetch All Users...", {
+          extensions: {
+            code: 'INTERNAL_SERVER_ERROR'
+          },
+        });
+      }
     },
   },
 
   Mutation: {
-    createUser: (_: User | undefined, args: CreateUserArgs ): User => {
+    createUser: async (_: User | undefined, args: CreateUserArgs ): Promise<User> => {
 
       if (!args.name) {
         throw new GraphQLError("Missing required field 'name'", {
@@ -21,21 +30,18 @@ export const userResolver = {
         })
       }
 
-      const newUser: User = {
-        id: String(Math.floor(Math.random() * 1000)),
-        name: args.name,
-        description: '',
-        followers: [],
-        following: [],
-        posts: [],
-        comments: [],
-        createdAt: new Date(),
+      try {
+        const newUser = await userDB.create({ name: args.name, description: '', });
+        return newUser.toJSON();
+      } catch (error) {
+        console.warn("Error when creating user: ", error);
+        throw new GraphQLError("Failed to Create New User...", {
+          extensions: {
+            code: 'INTERNAL_SERVER_ERROR'
+          },
+        });
       }
 
-      users.push(newUser);
-      return newUser;
     },
   },
 };
-
-const users: User[] = [];
