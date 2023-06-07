@@ -16,9 +16,15 @@ npm start
 ```
 
 Modify port in a .env file
-```env
+```
 PORT=####
+```
+
+Modify MongoDB URI in a .env file to connect to a database
+```
+MONGO_DEV_URI=mongodb://localhost:27017
 ```
 
 To reach dev GraphQL introspection navigate to:
 ```http://localhost:PORT/graphql```
+
