@@ -18,9 +18,14 @@ export const querySchema = gql`
     """
     createUser(name: String): User
     """
-    Soft deletes a user that has the given ID.
-    Soft Deletion does not completely delete the resource but instead marks content related to user as "DELETED".
+    Soft deletes a user with the given ID.
+    Soft Deletion marks the user as a "DELETED USER" and can be restored in the future if desired.
     """
     deleteUserSoft(id: ID): User
+    """
+    Hard deletes a user with the given ID.
+    Hard Deletion completely removes the user from the database. WARNING: A user's data cannot be recovered after this process.
+    """
+    deleteUserHard(id: ID): User
   }
 `;

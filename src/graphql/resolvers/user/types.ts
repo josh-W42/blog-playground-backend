@@ -1,5 +1,5 @@
 export interface CreateUserArgs {
-  name: string,
+  name: string;
 }
 
 export interface DeleteUserArgs {

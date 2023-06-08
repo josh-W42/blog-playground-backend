@@ -18,7 +18,7 @@ export const userSchema = gql`
     """
     description: String
     # followers: [User]
-    # following: [User] 
+    # following: [User]
     # posts: [Post]
     # comments: [Comment]
     """

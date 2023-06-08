@@ -9,18 +9,17 @@ import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
 import {expressMiddleware} from '@apollo/server/express4';
-import { DB } from './models';
+import {DB} from './models';
 
 interface Context {
   token?: string;
 }
 
 (async () => {
-  dotenv.config()
+  dotenv.config();
   const app = express();
   const httpServer = http.createServer(app);
   const {json} = bodyParser;
-  
 
   const server = new ApolloServer<Context>({
     schema: buildSubgraphSchema([
@@ -30,7 +29,7 @@ interface Context {
       },
       {
         typeDefs: typeDefs.querySchema,
-      }
+      },
     ]),
     plugins: [ApolloServerPluginDrainHttpServer({httpServer})],
   });
@@ -41,13 +40,12 @@ interface Context {
     '/graphql',
     cors<cors.CorsRequest>(),
     json(),
-    morgan("common"),
+    morgan('common'),
     expressMiddleware(server, {
       context: async ({req}) => ({token: req.headers.token}),
     })
   );
 
-  
   const PORT = process.env.PORT || 4000;
   const mongoURI = process.env.MONGO_PROD_URI || process.env.MONGO_DEV_URI;
   DB.Init(mongoURI);
