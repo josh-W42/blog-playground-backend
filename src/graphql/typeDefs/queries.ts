@@ -6,11 +6,20 @@ export const querySchema = gql`
   #graphql
 
   type Query {
+    """
+    Retrieves every created user.
+    """
     getUsers: [User]
   }
 
   type Mutation {
+    """
+    Creates a user with a given name.
+    """
     createUser(name: String): User
+    """
+    Deletes a user that has the given ID.
+    """
     deleteUser(id: ID): User
   }
 `;
