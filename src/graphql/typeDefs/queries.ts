@@ -18,8 +18,9 @@ export const querySchema = gql`
     """
     createUser(name: String): User
     """
-    Deletes a user that has the given ID.
+    Soft deletes a user that has the given ID.
+    Soft Deletion does not completely delete the resource but instead marks content related to user as "DELETED".
     """
-    deleteUser(id: ID): User
+    deleteUserSoft(id: ID): User
   }
 `;

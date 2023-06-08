@@ -42,7 +42,7 @@ export const userResolver = {
         });
       }
     },
-    deleteUser: async (_: User | undefined, args: DeleteUserArgs): Promise<User> => {
+    deleteUserSoft: async (_: User | undefined, args: DeleteUserArgs): Promise<User> => {
       if (!args.id) {
         throw new GraphQLError("Missing required field 'id'", {
           extensions: {
