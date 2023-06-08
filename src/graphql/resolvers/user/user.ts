@@ -1,8 +1,5 @@
-import {GraphQLError} from 'graphql';
-import {User, userDB} from '../../../models';
-import {CreateUserArgs, DeleteUserArgs} from './types';
 import {getUsers} from './queries';
-import {createUser, deleteUserSoft} from './mutations';
+import {createUser, deleteUserSoft, deleteUserHard} from './mutations';
 
 export const userResolver = {
   Query: {
@@ -12,5 +9,6 @@ export const userResolver = {
   Mutation: {
     createUser,
     deleteUserSoft,
+    deleteUserHard,
   },
 };
