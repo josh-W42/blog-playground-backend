@@ -10,6 +10,7 @@ import morgan from 'morgan';
 import dotenv from 'dotenv';
 import {expressMiddleware} from '@apollo/server/express4';
 import {DB} from './models';
+import {logger} from './logger';
 
 interface Context {
   token?: string;
@@ -40,9 +41,15 @@ interface Context {
     '/graphql',
     cors<cors.CorsRequest>(),
     json(),
-    morgan('common'),
     expressMiddleware(server, {
       context: async ({req}) => ({token: req.headers.token}),
+    })
+  );
+
+  logger.debug("Overriding 'Express' logger...");
+  app.use(
+    morgan('combined', {
+      stream: {write: message => logger.info(message.trim())},
     })
   );
 
