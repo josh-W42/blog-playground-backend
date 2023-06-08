@@ -11,5 +11,6 @@ export const querySchema = gql`
 
   type Mutation {
     createUser(name: String): User
+    deleteUser(id: ID): User
   }
 `;
