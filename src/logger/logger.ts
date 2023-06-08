@@ -2,7 +2,7 @@ import {transports, createLogger, format, addColors} from 'winston';
 const {combine, timestamp, printf, colorize} = format;
 
 const formatting = printf(({level, message, timestamp}) => {
-  return `[${timestamp}] [${level}]: ${message}`;
+  return `${timestamp} ${level}: ${message}`;
 });
 
 export const logger = createLogger({
@@ -23,14 +23,6 @@ export const logger = createLogger({
   ],
   exitOnError: false,
 });
-
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(
-    new transports.Console({
-      format: format.simple(),
-    })
-  );
-}
 
 addColors({
   error: 'red',

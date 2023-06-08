@@ -41,15 +41,15 @@ interface Context {
     '/graphql',
     cors<cors.CorsRequest>(),
     json(),
+    morgan('combined', {
+      stream: {
+        write: message => {
+          return logger.info(message.trim());
+        },
+      },
+    }),
     expressMiddleware(server, {
       context: async ({req}) => ({token: req.headers.token}),
-    })
-  );
-
-  logger.debug("Overriding 'Express' logger...");
-  app.use(
-    morgan('combined', {
-      stream: {write: message => logger.info(message.trim())},
     })
   );
 
@@ -58,5 +58,5 @@ interface Context {
   DB.Init(mongoURI);
 
   await new Promise<void>(resolve => httpServer.listen({port: PORT}, resolve));
-  console.log(`🚀 Server ready at http://localhost:${PORT}/`);
+  logger.info(`🚀 Server ready at http://localhost:${PORT}/`);
 })();

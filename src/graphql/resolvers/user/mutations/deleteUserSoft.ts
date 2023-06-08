@@ -1,6 +1,7 @@
 import {GraphQLError} from 'graphql';
 import {User, userDB} from '../../../../models';
 import {DeleteUserArgs} from '../types';
+import {logger} from '../../../../logger';
 
 export const deleteUserSoft = async (
   _: User | undefined,
@@ -36,9 +37,10 @@ export const deleteUserSoft = async (
       originalProfilePictureURL: user.profilePictureURL,
     });
 
+    logger.info(`Soft Deletion of User: ${user.name} Successful`);
     return user.toJSON();
   } catch (error) {
-    console.error('Error When Soft Deleting User: ', error);
+    logger.error('Error When Soft Deleting User: ', error);
     throw new GraphQLError('Failed to Delete User...', {
       extensions: {
         code: 'INTERNAL_SERVER_ERROR',
