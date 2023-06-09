@@ -11,6 +11,7 @@ export const deleteUserSoft = async (
     throw new GraphQLError("Missing required field 'id'", {
       extensions: {
         code: 'BAD_USER_INPUT',
+        http: {status: 400},
       },
     });
   }

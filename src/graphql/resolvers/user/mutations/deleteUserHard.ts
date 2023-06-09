@@ -11,6 +11,7 @@ export const deleteUserHard = async (
     throw new GraphQLError("Missing required field 'id'", {
       extensions: {
         code: 'BAD_USER_INPUT',
+        http: {status: 400},
       },
     });
   }
@@ -28,7 +29,7 @@ export const deleteUserHard = async (
     }
 
     await user.deleteOne();
-    logger.info(`Hard Deletion of User: ${user.name} Successful`);
+    logger.info(`Hard Deletion of User: ${user.originalName} Successful`);
     return user.toJSON();
   } catch (error) {
     logger.error('Error When Soft Deleting User: ', error);
