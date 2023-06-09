@@ -12,6 +12,7 @@ export const getUsers = async () => {
     throw new GraphQLError('Failed to Fetch All Users...', {
       extensions: {
         code: 'INTERNAL_SERVER_ERROR',
+        http: {status: 500},
       },
     });
   }

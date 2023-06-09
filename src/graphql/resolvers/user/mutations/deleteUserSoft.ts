@@ -22,6 +22,7 @@ export const deleteUserSoft = async (
       throw new GraphQLError('User Not Found...', {
         extensions: {
           code: 'BAD_USER_INPUT',
+          http: {status: 400},
         },
       });
     }
@@ -44,6 +45,7 @@ export const deleteUserSoft = async (
     throw new GraphQLError('Failed to Delete User...', {
       extensions: {
         code: 'INTERNAL_SERVER_ERROR',
+        http: {status: 500},
       },
     });
   }

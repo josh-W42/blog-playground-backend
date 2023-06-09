@@ -11,6 +11,7 @@ export const createUser = async (
     throw new GraphQLError("Missing required field 'name'", {
       extensions: {
         code: 'BAD_USER_INPUT',
+        http: {status: 400},
       },
     });
   }
@@ -24,6 +25,7 @@ export const createUser = async (
     throw new GraphQLError('Failed to Create New User...', {
       extensions: {
         code: 'INTERNAL_SERVER_ERROR',
+        http: {status: 500},
       },
     });
   }
