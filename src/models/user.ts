@@ -1,8 +1,15 @@
-import mongoose, {Schema} from 'mongoose';
+import mongoose, {
+  Document,
+  PassportLocalDocument,
+  PassportLocalModel,
+  Schema,
+} from 'mongoose';
+import passportLocalMongoose from 'passport-local-mongoose';
 
-export interface User {
+export interface User extends PassportLocalDocument {
   id: string;
   name: string;
+  password: string;
   description: string;
   // followers: User[],
   // following: User[],
@@ -52,4 +59,11 @@ const userSchema = new Schema(
   {timestamps: true}
 );
 
-export const userDB = mongoose.model('User', userSchema);
+interface UserModel<T extends Document> extends PassportLocalModel<T> {}
+
+userSchema.plugin(passportLocalMongoose, {usernameField: 'name'});
+
+export const userModel: UserModel<User> = mongoose.model<User>(
+  'User',
+  userSchema
+);

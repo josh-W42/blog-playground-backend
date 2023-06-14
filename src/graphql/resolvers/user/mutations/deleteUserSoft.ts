@@ -1,5 +1,5 @@
 import {GraphQLError} from 'graphql';
-import {User, userDB} from '../../../../models';
+import {User, userModel} from '../../../../models';
 import {DeleteUserArgs} from '../types';
 import {logger} from '../../../../logger';
 
@@ -17,7 +17,7 @@ export const deleteUserSoft = async (
   }
 
   try {
-    const user = await userDB.findById(args.id);
+    const user = await userModel.findById(args.id);
 
     if (!user) {
       throw new GraphQLError('User Not Found...', {

@@ -1,5 +1,5 @@
 import {GraphQLError} from 'graphql';
-import {User, userDB} from '../../../../models';
+import {User, userModel} from '../../../../models';
 import {DeleteUserArgs} from '../types';
 import {logger} from '../../../../logger';
 
@@ -17,7 +17,7 @@ export const deleteUserHard = async (
   }
 
   try {
-    const user = await userDB.findById(args.id);
+    const user = await userModel.findById(args.id);
 
     if (!user) {
       throw new GraphQLError('User Not Found...', {
@@ -29,7 +29,8 @@ export const deleteUserHard = async (
     }
 
     await user.deleteOne();
-    logger.info(`Hard Deletion of User: ${user.originalName} Successful`);
+    const ogName = user.name === 'DELETED' ? user.originalName : user.name;
+    logger.info(`Hard Deletion of User: ${ogName} Successful`);
     return user.toJSON();
   } catch (error) {
     logger.error('Error When Soft Deleting User: ', error);

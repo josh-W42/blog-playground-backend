@@ -1,10 +1,10 @@
 import {GraphQLError} from 'graphql';
-import {userDB} from '../../../../models';
+import {userModel} from '../../../../models';
 import {logger} from '../../../../logger';
 
 export const getUsers = async () => {
   try {
-    const users = await userDB.find();
+    const users = await userModel.find();
     logger.info('Successfully Retrieved All Users');
     return users;
   } catch (error) {

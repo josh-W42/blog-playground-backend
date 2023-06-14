@@ -1,28 +1,39 @@
 import {GraphQLError} from 'graphql';
-import {User, userDB} from '../../../../models';
+import {User, userModel} from '../../../../models';
 import {CreateUserArgs} from '../types';
 import {logger} from '../../../../logger';
+import {Server} from '../../../../server';
+import axios, {AxiosError} from 'axios';
 
 export const createUser = async (
   _: User | undefined,
   args: CreateUserArgs
 ): Promise<User> => {
-  if (!args.name) {
-    throw new GraphQLError("Missing required field 'name'", {
-      extensions: {
-        code: 'BAD_USER_INPUT',
-        http: {status: 400},
-      },
-    });
-  }
-
   try {
-    const newUser = await userDB.create({name: args.name, description: ''});
-    logger.info(`New User: ${args.name} Created Successfully`);
-    return newUser.toJSON();
+    const response = await axios.post<{user: User}>(
+      `${Server.serverURL}:${Server.port}/auth/signup`,
+      {
+        name: args.name,
+        password: args.password,
+      }
+    );
+
+    logger.info('SignUp Successful');
+    const {user} = response.data;
+    return user;
   } catch (error) {
-    logger.error('Error when creating user: ', error);
-    throw new GraphQLError('Failed to Create New User...', {
+    if (error instanceof AxiosError && error.response?.status === 400) {
+      logger.error('Error When Signing Up User: ', error.response.data);
+      throw new GraphQLError(`Failed to Sign Up User... `, {
+        extensions: {
+          code: 'BAD_USER_INPUT',
+          http: {status: 400},
+          data: error.response.data,
+        },
+      });
+    }
+    logger.error('Error When Signing Up User: ', error);
+    throw new GraphQLError('Failed To Sign Up User...', {
       extensions: {
         code: 'INTERNAL_SERVER_ERROR',
         http: {status: 500},

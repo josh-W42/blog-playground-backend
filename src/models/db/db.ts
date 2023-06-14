@@ -4,14 +4,14 @@ import {logger} from '../../logger';
 export class DB {
   private static uri: string;
 
-  public static Init = (connectionURI?: string) => {
+  public static Init = async (connectionURI?: string) => {
     if (!connectionURI) {
       logger.warn('No Database URI Provided... Database NOT Connected...');
       return;
     }
     logger.debug('Initializing Database...');
     this.SetConnection(connectionURI);
-    this.Connect();
+    await this.Connect();
   };
 
   public static SetConnection = (connectionURI: string) => {
