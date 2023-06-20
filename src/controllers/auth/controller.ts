@@ -20,8 +20,6 @@ export class AuthController {
         message: 'Name or Password Missing',
       });
     }
-    logger.info(name);
-    logger.info(password);
 
     // Check if user exists already
     try {
