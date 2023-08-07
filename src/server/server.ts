@@ -73,7 +73,9 @@ export class Server {
       })
     );
 
+    // TODO: logging doesn't seem to be working as intended for requests outside of graphQL.
     this._app.use(
+      cors<cors.CorsRequest>(),
       json(),
       router,
       morgan('combined', {
