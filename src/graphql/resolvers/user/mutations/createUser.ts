@@ -18,12 +18,11 @@ export const createUser = async (
       }
     );
 
-    logger.info('SignUp Successful');
     const {user} = response.data;
     return user;
   } catch (error) {
     if (error instanceof AxiosError && error.response?.status === 400) {
-      logger.error('Error When Signing Up User: ', error.response.data);
+      logger.error(`Error When Signing Up User: ${error.response.data}`);
       throw new GraphQLError(`Failed to Sign Up User... `, {
         extensions: {
           code: 'BAD_USER_INPUT',
@@ -32,7 +31,7 @@ export const createUser = async (
         },
       });
     }
-    logger.error('Error When Signing Up User: ', error);
+    logger.error(`Error When Signing Up User: ${error}`);
     throw new GraphQLError('Failed To Sign Up User...', {
       extensions: {
         code: 'INTERNAL_SERVER_ERROR',

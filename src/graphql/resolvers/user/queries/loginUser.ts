@@ -12,23 +12,44 @@ export const loginUser = async (_: User | undefined, args: LoginUserArgs) => {
       {
         name: args.name,
         password: args.password,
-      }
+      },
+      {method: 'POST'}
     );
-
-    logger.info('Login Successful');
     return true;
   } catch (error) {
-    if (error instanceof AxiosError && error.response?.status === 400) {
-      logger.error('Error When Logging In User: ', error.response.data);
-      throw new GraphQLError(`Failed to Login User... `, {
-        extensions: {
-          code: 'BAD_USER_INPUT',
-          http: {status: 400},
-          data: error.response.data,
-        },
-      });
+    if (error instanceof AxiosError) {
+      switch (error.response?.status) {
+        case 400:
+          logger.error(`Error When Logging In User: ${error.response.data}`);
+          throw new GraphQLError(`Failed to Login User... `, {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              http: {status: 400},
+              data: error.response.data,
+            },
+          });
+        case 401:
+          logger.error(`Error When Logging In User: ${error.response.data}`);
+          throw new GraphQLError(`Failed to Login User... `, {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              http: {status: 401},
+              data: error.response.data,
+            },
+          });
+        default:
+          logger.error(`Error When Logging In User: ${error.response?.data}`);
+          throw new GraphQLError(`Failed to Login User... `, {
+            extensions: {
+              code: 'INTERNAL_SERVER_ERROR',
+              http: {status: 500},
+              data: error.response?.data && 'No Data',
+            },
+          });
+      }
     }
-    logger.error('Error When Logging In User: ', error);
+
+    logger.error(`Error When Logging In User: ${error}`);
     throw new GraphQLError('Failed To Login User...', {
       extensions: {
         code: 'INTERNAL_SERVER_ERROR',

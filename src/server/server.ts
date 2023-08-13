@@ -61,15 +61,22 @@ export class Server {
       '/graphql',
       cors<cors.CorsRequest>(),
       json(),
-      morgan('combined', {
-        stream: {
-          write: message => {
-            return logger.info(message.trim());
+      morgan(
+        ':status :method :url HTTP/:http-version :response-time ms ":referrer" ":user-agent"',
+        {
+          stream: {
+            write: message => {
+              return logger.info(message.trim());
+            },
           },
-        },
-      }),
+        }
+      ),
       expressMiddleware(this._server, {
-        context: async ({req}) => ({token: req.headers.token}),
+        context: async ({req}) => {
+          return {
+            token: req.headers.token,
+          };
+        },
       })
     );
 
@@ -78,16 +85,16 @@ export class Server {
       cors<cors.CorsRequest>(),
       json(),
       router,
-      morgan('combined', {
-        stream: {
-          write: message => {
-            return logger.info(message.trim());
+      morgan(
+        ':status :method :url HTTP/:http-version :response-time ms ":referrer" ":user-agent"',
+        {
+          stream: {
+            write: message => {
+              return logger.info(message.trim());
+            },
           },
-        },
-      })
-    );
-
-    this._app.use(
+        }
+      ),
       session({
         secret: process.env.SESSION_SECRET || 'Best Secret In The World',
         resave: false,
@@ -123,6 +130,7 @@ export class Server {
       userModel
         .findById(id)
         .then(user => {
+          console.log(user);
           done(null, user);
         })
         .catch(err => {
